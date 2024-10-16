@@ -8,7 +8,9 @@ defineProps<{
 </script>
 
 <template>
-  <NuxtLink :to="`/${item.media_type || type}/${item.id}`" pb2>
+  <NuxtLink
+    :to="`/${item.media_type || type}/${item.id}`" pb2
+  >
     <div
       block bg-gray4:10 p1
       class="aspect-10/16"
@@ -23,6 +25,7 @@ defineProps<{
         :src="`/tmdb${item.poster_path}`"
         :alt="item.title || item.name"
         w-full h-full object-cover
+        :style="{ 'view-transition-name': `item-${item.id}` }"
       />
       <div v-else h-full op10 flex>
         <div i-ph:question ma text-4xl />
@@ -34,7 +37,7 @@ defineProps<{
     <div flex text-sm gap-2 items-center>
       <StarsRate w-20 :value="item.vote_average" />
       <div op60>
-        {{ item.vote_average }}
+        {{ formatVote(item.vote_average) }}
       </div>
     </div>
   </NuxtLink>

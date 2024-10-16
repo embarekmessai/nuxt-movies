@@ -9,12 +9,12 @@ definePageMeta({
 })
 
 const route = useRoute()
-const type = $computed(() => route.params.type as MediaType || 'movie')
-const id = $computed(() => route.params.id as string)
+const type = computed(() => route.params.type as MediaType || 'movie')
+const id = computed(() => route.params.id as string)
 
 const [item, recommendations] = await Promise.all([
-  getMedia(type, id),
-  getRecommendations(type, id),
+  getMedia(type.value, id.value),
+  getRecommendations(type.value, id.value),
 ])
 const $img = useImage()
 
@@ -31,7 +31,7 @@ useHead({
   <div>
     <MediaHero :item="item" />
     <MediaDetails :item="item" :type="type" />
-    <CarouselBase v-if="recommendations?.results.length">
+    <CarouselBase v-if="recommendations?.results?.length">
       <template #title>
         {{ $t('More like this') }}
       </template>
@@ -40,7 +40,7 @@ useHead({
         :key="i.id"
         :item="i"
         :type="type"
-        flex-1 w-60
+        flex-1 w-40 md:w-60
       />
     </CarouselBase>
     <TheFooter />

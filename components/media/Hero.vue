@@ -1,36 +1,37 @@
 <script setup lang="ts">
 import type { Media } from '~/types'
-import { TMDB_IMAGE_BASE_ORIGINAL } from '~/constants/images'
 import { formatTime } from '~/composables/utils'
 
-const { item } = defineProps<{
+const props = withDefaults(defineProps<{
   item: Media
-}>()
+}>(), {
+  item: () => ({} as Media),
+})
 
-const trailer = $computed(() => getTrailer(item))
+const trailer = computed(() => getTrailer(props.item))
 
 const showModal = useIframeModal()
 function playTrailer() {
-  if (trailer)
-    showModal(trailer)
+  if (trailer.value)
+    showModal(trailer.value)
 }
 
 const mounted = useMounted()
 </script>
 
 <template>
-  <div :key="item.id" relative class="aspect-ratio-1/1 md:aspect-ratio-3/2 lg:aspect-ratio-25/9" bg-black>
+  <div :key="item.id" relative class="aspect-ratio-3/2 lg:aspect-ratio-25/9" bg-black>
     <div
       absolute top-0 right-0
       lt-lg="left-0"
       lg="bottom-0 left-1/3"
     >
       <NuxtImg
-        width="400"
-        height="225"
+        width="1220"
+        height="659"
         format="webp"
-        :src="`/tmdb${item.backdrop_path}`"
-        :alt="item.title || item.name"
+        :src="`/tmdb${props.item.backdrop_path}`"
+        :alt="props.item.title || props.item.name"
         h-full w-full object-cover
       />
     </div>
@@ -44,31 +45,35 @@ const mounted = useMounted()
       <Transition appear name="hero">
         <div v-show="mounted">
           <h1 mt-2 text-4xl lg:text-5xl line-clamp-2>
-            {{ item.title || item.name }}
+            {{ props.item.title || props.item.name }}
           </h1>
-          <div flex="~ row wrap" gap3 items-center mt4>
-            <StarsRate w-25 :value="item.vote_average" />
-            <div op50 hidden md:block>
-              {{ item.vote_average }}
+          <div flex="~ row wrap" gap2 items-center mt4>
+            <StarsRate w-25 :value="props.item.vote_average" />
+            <div class="op50 hidden md:block">
+              {{ formatVote(props.item.vote_average) }}
             </div>
-            <div op50 hidden md:block>
-              {{ $t('{numberOfReviews} Reviews', { numberOfReviews: item.vote_count }) }}
+            <span class="op50 hidden md:block">·</span>
+            <div class="op50 hidden md:block">
+              {{ $t('{numberOfReviews} Reviews', { numberOfReviews: formatVote(props.item.vote_count) }) }}
             </div>
-            <div v-if="item.release_date" op50>
-              {{ item.release_date.slice(0, 4) }}
+            <span v-if="props.item.release_date" op50>·</span>
+            <div v-if="props.item.release_date" op50>
+              {{ props.item.release_date.slice(0, 4) }}
             </div>
-            <div v-if="item.runtime" op50>
-              {{ formatTime(item.runtime) }}
+            <span v-if="props.item.runtime" op50>·</span>
+            <div v-if="props.item.runtime" op50>
+              {{ formatTime(props.item.runtime) }}
             </div>
           </div>
-          <p mt-2 op80 leading-relaxed of-hidden line-clamp-3 md:line-clamp-5 text-xs md:text-base>
-            {{ item.overview }}
+          <p class="mt-2 op80 leading-relaxed of-hidden line-clamp-3 md:line-clamp-5 text-xs md:text-base">
+            {{ props.item.overview }}
           </p>
-          <div v-if="trailer" py5 display-none lg:block>
+          <div v-if="trailer" class="py5 display-none lg:block">
             <button
+              type="button"
               flex="~ gap2" items-center p="x6 y3"
               bg="gray/15 hover:gray/20" transition
-              title="Watch Trailer"
+              :title="$t('Watch Trailer')"
               @click="playTrailer()"
             >
               <div i-ph-play />
@@ -80,8 +85,9 @@ const mounted = useMounted()
     </div>
     <div v-if="trailer" lg:hidden absolute left-0 top-0 right-0 h="2/3" items-center justify-center>
       <button
+        type="button"
         items-center p10 text-5xl op20 hover:op80 transition
-        title="Watch Trailer"
+        :title="$t('Watch Trailer')"
         @click="playTrailer()"
       >
         <div i-ph-play-circle-light />

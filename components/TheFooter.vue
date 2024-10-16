@@ -10,8 +10,8 @@
       <div op50 text-sm>
         Made with
       </div>
-      <a href="https://v3.nuxtjs.org/" target="_blank" title="Nuxt 3">
-        <IconNuxt3 h6 />
+      <a href="https://nuxt.com/" target="_blank" title="Nuxt 3">
+        <IconNuxt3 h5 />
       </a>
     </div>
     <div flex="~ row gap2" items-center>
@@ -27,7 +27,7 @@
         This project uses the TMDB API but is not endorsed or certified by TMDB.
       </p>
     </div>
-    <div>
+    <div flex gap4 items-center>
       <ExternalLinks
         :links="{
           twitter_id: 'nuxt_js',
@@ -38,6 +38,8 @@
           <IconVercel alt="Vercel" />
         </a>
       </ExternalLinks>
+
+      <LanguageSwitcher />
     </div>
   </footer>
 </template>

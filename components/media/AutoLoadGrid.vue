@@ -1,46 +1,53 @@
 <script setup lang="ts">
 import type { Media, MediaType } from '~/types'
 
-const props = defineProps<{
-  items: Media[]
-  type: MediaType
-  fetch: (page: number) => Promise<void>
-  count?: number
-}>()
+const props = withDefaults(
+  defineProps<{
+    items: Media[]
+    type: MediaType
+    fetch: (page: number) => Promise<void>
+    count?: number
+    blocking?: boolean
+  }>(),
+  {
+    blocking: true,
+  },
+)
 
 const tailEl = ref<HTMLDivElement>()
 
 let page = 0
-let isLoading = $ref(false)
+const isLoading = ref(false)
 
 async function loadingNext() {
-  if (isLoading)
+  if (isLoading.value)
     return
-  isLoading = true
+  isLoading.value = true
   try {
     page += 1
     await props.fetch(page)
   }
   finally {
-    isLoading = false
+    isLoading.value = false
   }
 }
 
-if (process.client) {
+if (process.server || props.blocking)
+  await loadingNext()
+else
   loadingNext()
+
+if (process.client) {
   useIntervalFn(() => {
-    if (!tailEl.value || isLoading)
+    if (!tailEl.value || isLoading.value)
       return
-    if (props.count != null && props.items.length >= props.count)
+    if (props.count != null && props.items?.length >= props.count)
       return
     const { top } = tailEl.value.getBoundingClientRect()
     const delta = top - window.innerHeight
     if (delta < 400)
       loadingNext()
   }, 500)
-}
-else {
-  await loadingNext()
 }
 </script>
 

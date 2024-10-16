@@ -19,6 +19,9 @@ export default defineConfig({
     ['n-tab-active', 'border-current op100'],
     ['border-base', 'border-gray-400/20'],
   ],
+  rules: [
+    [/^view-transition-([\w-]+)$/, ([, name]) => ({ 'view-transition-name': name })],
+  ],
   theme: {
     colors: {
       primary: '#40c1ad',

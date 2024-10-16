@@ -1,32 +1,38 @@
 {
+  "type": "module",
   "private": true,
-  "packageManager": "pnpm@7.13.4",
+  "packageManager": "pnpm@9.0.2",
   "scripts": {
     "build": "nuxi build",
     "dev": "nuxi dev",
     "dev:proxy": "cd proxy && pnpm dev",
     "start": "node .output/server/index.mjs",
-    "postinstall": "nuxi prepare",
-    "lint": "eslint ."
+    "prepare": "nuxi prepare",
+    "lint": "eslint .",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@nuxtjs/html-validator": "^1.8.2",
+    "vue-router-better-scroller": "^0.0.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.35.1",
-    "@iconify-json/carbon": "^1.1.14",
-    "@iconify-json/cib": "^1.1.3",
-    "@iconify-json/ph": "^1.1.3",
-    "@iconify-json/simple-icons": "^1.1.41",
-    "@iconify-json/twemoji": "^1.1.10",
-    "@nuxt/image-edge": "1.0.0-27913696.5d122a3",
-    "@nuxtjs/color-mode": "^3.2.0",
-    "@nuxtjs/i18n": "8.0.0-beta.9",
-    "@pinia/nuxt": "^0.4.6",
-    "@unocss/nuxt": "^0.49.1",
-    "@vueuse/nuxt": "^9.12.0",
-    "eslint": "^8.33.0",
-    "lru-cache": "^7.14.1",
-    "nuxt": "npm:nuxt3@3.1.2-rc.0-27916704.aa646f0",
-    "ohash": "^1.0.0",
-    "pinia": "^2.0.29",
-    "typescript": "^4.9.4"
+    "@antfu/eslint-config": "^2.15.0",
+    "@iconify-json/carbon": "^1.1.31",
+    "@iconify-json/cib": "^1.1.8",
+    "@iconify-json/ph": "^1.1.12",
+    "@iconify-json/simple-icons": "^1.1.99",
+    "@iconify-json/twemoji": "^1.1.15",
+    "@nuxt/devtools": "^1.1.5",
+    "@nuxt/image": "^1.5.0",
+    "@nuxtjs/color-mode": "^3.4.0",
+    "@nuxtjs/i18n": "^8.3.0",
+    "@unocss/nuxt": "^0.59.4",
+    "@vueuse/nuxt": "^10.9.0",
+    "eslint": "^9.0.0",
+    "lru-cache": "^10.2.0",
+    "nuxt": "^3.11.2",
+    "ohash": "^1.1.3",
+    "typescript": "^5.4.5",
+    "vue-tsc": "^2.0.13"
   }
 }
